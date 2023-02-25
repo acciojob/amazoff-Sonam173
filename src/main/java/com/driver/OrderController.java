@@ -2,6 +2,7 @@ package com.driver;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("orders")
 public class   OrderController {
-    @Autowired
+   @Autowired
     private OrderRepository orderRepository;
      @Autowired
      private DeliveryPartnerRepository deliveryPartnerRepository;
      private Map<String,String> assignedOrders;
 
-    public OrderController() {
+    public OrderController(OrderRepository orderRepository, DeliveryPartnerRepository deliveryPartnerRepository) {
+        this.orderRepository = orderRepository;
+        this.deliveryPartnerRepository = deliveryPartnerRepository;
         assignedOrders = new HashMap<>();
     }
 
@@ -103,7 +106,8 @@ public class   OrderController {
 
         //orders should contain a list of orders by PartnerId
 
-        return new ResponseEntity<>(orders, HttpStatus.CREATED);
+        ResponseEntity<T> tResponseEntity = new ResponseEntity<>(orders, HttpStatus.CREATED);
+        return tResponseEntity;
     }
 
     @GetMapping("/get-all-orders")
